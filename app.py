@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for
+import subprocess
 
 app = Flask(__name__)
 
@@ -28,5 +29,22 @@ def update_item(index):
         items[index] = request.form.get('new_item')
     return redirect(url_for('index'))
 
+@app.route('/testing', methods=['POST'])
+def testing():
+    payload = request.json
+    ref = payload.get('ref', '')
+    if ref == 'refs/heads/staging':
+        subprocess.run(["./test_script.sh"])
+        return 'Testing script executed', 200
+    return 'Not the staging branch', 200
+
+@app.route('/deployment', methods=['POST'])
+def deployment():
+    payload = request.json
+    ref = payload.get('ref', '')
+    if ref == 'refs/heads/main':
+        subprocess.run(["./deploy_script.sh"])
+        return 'Deployment script executed', 200
+    return 'Not the main branch', 200
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
