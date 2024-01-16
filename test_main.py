@@ -1,36 +1,32 @@
 import unittest
 from app import app
 
+class TestIntegration(unittest.TestCase):
 
-
-class FlaskTestCase(unittest.TestCase):
 
     def setUp(self):
         self.app = app.test_client()
+        self.app.testing = True
 
-    def test_home(self):
-        response = self.app.get('/')
-        self.assertEqual(response.status_code, 200)
+    def test_add_and_delete_item(self):
 
-    def test_hello(self):
-        response = self.app.get('/api/hello')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {'hello': 'world'})
+        add_response = self.app.post('/add', data={'item': 'Test Item'}, follow_redirects=True)
+        self.assertEqual(add_response.status_code, 200) 
 
-    def test_hello_name(self):
-        response = self.app.get('/api/hello/ben')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json, {'hello': 'ben'})
 
-    def test_whoami(self):
-        response = self.app.get('/api/whoami')
-        self.assertEqual(response.status_code, 200)
-        self.assertIsNotNone(response.json['ip'])
+        update_response = self.app.post('/update/0', data={'new_item': 'Updated Test Item'}, follow_redirects=True)
+        self.assertEqual(update_response.status_code, 200)
 
-    def test_whoami_name(self):
-        response = self.app.get('/api/whoami/ben')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json['name'], 'ben')
+
+        index_response = self.app.get('/')
+        self.assertIn(b'Test Item', index_response.data) 
+
+        delete_response = self.app.get('/delete/0', follow_redirects=True)
+        self.assertEqual(delete_response.status_code, 200)
+
+ 
+        updated_index_response = self.app.get('/')
+        self.assertNotIn(b'Test Item', updated_index_response.data) 
 
 if __name__ == '__main__':
     unittest.main()

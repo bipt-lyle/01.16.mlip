@@ -1,75 +1,32 @@
-
-"""
-simple python flask application
-""" 
-
-##########################################################################
-## Imports
-##########################################################################
-  
-import os
- 
-from flask import Flask
-from flask import request
-from flask import render_template
-from flask import url_for
-from flask.json import jsonify
-
-
-
-##########################################################################
-## Application Setup
-##########################################################################
+from flask import Flask, request, render_template, redirect, url_for
 
 app = Flask(__name__)
 
-##########################################################################
-## Routes
-##########################################################################
+# In-memory database
+items = []
 
-@app.route("/")
-def home():
-    return render_template("home.html")
+@app.route('/')
+def index():
+    return render_template('index.html', items=items)
 
-@app.route("/api/hello")
-def hello():
-    """
-    Return a hello message
-    """
-    return jsonify({"hello": "world"})
+@app.route('/add', methods=['POST'])
+def add_item():
+    item = request.form.get('item')
+    if item:
+        items.append(item)
+    return redirect(url_for('index'))
 
-@app.route("/api/hello/<name>")
-def hello_name(name):
-    """
-    Return a hello message with name
-    """
-    return jsonify({"hello": name})
+@app.route('/delete/<int:index>')
+def delete_item(index):
+    if index < len(items):
+        items.pop(index)
+    return redirect(url_for('index'))
 
-@app.route("/api/whoami")
-def whoami():
-    """
-    Return a JSON object with the name, ip, and user agent
-    """
-    return jsonify(
-        name=request.remote_addr,
-        ip=request.remote_addr,
-        useragent=request.user_agent.string
-    )
-
-@app.route("/api/whoami/<name>")
-def whoami_name(name):
-    """
-    Return a JSON object with the name, ip, and user agent
-    """
-    return jsonify(
-        name=name,
-        ip=request.remote_addr,
-        useragent=request.user_agent.string
-    )
-
-##########################################################################
-## Main
-##########################################################################
+@app.route('/update/<int:index>', methods=['POST'])
+def update_item(index):
+    if index < len(items):
+        items[index] = request.form.get('new_item')
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, port=8080)
