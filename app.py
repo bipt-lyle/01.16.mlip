@@ -11,10 +11,9 @@ def testing():
     payload = request.json
     ref = payload.get('ref', '')
     if ref == 'refs/heads/staging':
-        subprocess.run(['bash', './deploy_script.sh'], shell=True)
-        print("yes")
+        subprocess.run(['bash', './test_script.sh'], shell=True)
+        print("Testing script executed")
         return 'Testing script executed', 200
-    print("no")
     return 'Not the staging branch', 200
 
 @app.route('/deployment', methods=['POST'])
@@ -22,7 +21,8 @@ def deployment():
     payload = request.json
     ref = payload.get('ref', '')
     if ref == 'refs/heads/main':
-        subprocess.run(['bash', './test_script.sh'], shell=True)
+        subprocess.run(['bash', './deploy_script.sh'], shell=True)
+        print("Deployment script executed")
         return 'Deployment script executed', 200
     return 'Not the main branch', 200
 if __name__ == '__main__':
