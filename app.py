@@ -28,5 +28,6 @@ def update_item(index):
         items[index] = request.form.get('new_item')
     return redirect(url_for('index'))
 
+
 if __name__ == '__main__':
-    app.run(debug=True, port=3000, use_reloader=False)
+    app.run(debug=True, use_reloader=False)
