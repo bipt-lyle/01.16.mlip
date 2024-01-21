@@ -30,4 +30,4 @@ def update_item(index):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=3000, use_reloader=False)
+    app.run(debug=True, port=5000, use_reloader=False)
