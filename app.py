@@ -19,8 +19,6 @@ def testing():
 
 @app.route('/deployment', methods=['POST'])
 def deployment():
-    print("Request Content-Type:", request.content_type)  # 打印内容类型
-    print("Raw Data:", request.data)  
     payload = request.json
     ref = payload.get('ref', '')
     if ref == 'refs/heads/main':
