@@ -26,4 +26,4 @@ def deployment():
         return 'Deployment script executed', 200
     return 'Not the main branch', 200
 if __name__ == '__main__':
-    app.run(debug=True, port=3000)
+    app.run(debug=True, port=3000, use_reloader=False)
