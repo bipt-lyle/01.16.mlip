@@ -28,6 +28,5 @@ class TestIntegration(unittest.TestCase):
         updated_index_response = self.app.get('/')
         self.assertNotIn(b'Test Item', updated_index_response.data) 
 
-
 if __name__ == '__main__':
     unittest.main()
