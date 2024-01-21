@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/testing', methods=['POST'])
 def testing():
-    print("Request Content-Type:", request.content_type)  # 打印内容类型
+    print("Request Content-Type:", request.content_type)  
     payload = request.json
     ref = payload.get('ref', '')
     if ref == 'refs/heads/staging':
