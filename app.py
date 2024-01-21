@@ -11,7 +11,7 @@ def testing():
     payload = request.json
     ref = payload.get('ref', '')
     if ref == 'refs/heads/staging':
-        subprocess.run(['./test_script.bat'], shell=True)
+        subprocess.run([r'C:\Users\33766\Desktop\01.16.mlip\01.16.mlip\test_script.bat'], shell=True)
         print("Testing script executed")
         return 'Testing script executed', 200
     return 'Not the staging branch', 200
@@ -21,7 +21,7 @@ def deployment():
     payload = request.json
     ref = payload.get('ref', '')
     if ref == 'refs/heads/main':
-        subprocess.run(['./deploy_script.bat'], shell=True)
+        subprocess.run([r'C:\Users\33766\Desktop\01.16.mlip\01.16.mlip\deploy_script.bat'], shell=True)
         print("Deployment script executed")
         return 'Deployment script executed', 200
     return 'Not the main branch', 200
